@@ -55,7 +55,17 @@
     <button>Trigger a Global Error</button>
   </section>
 
+  <script src="https://cdn.trackjs.com/agent/v3/latest/t.js"></script>
+
   <script>
+    window.TrackJS && TrackJS.install({ 
+      token: "fd3e25afffe048c880ce1396f4a9f66a"
+      // for more configuration options, see https://docs.trackjs.com
+    });
+  </script>
+
+  <script>
+                        
     let calculateBtn = document.querySelector('#calculate');
     calculateBtn.addEventListener('click', () => {
       let output = document.querySelector('output');
@@ -67,6 +77,112 @@
 
     let errorBtns = Array.from(document.querySelectorAll('#error-btns > button'));
     // TODO - Make buttons functional
+    errorBtns[0].addEventListener('click', () => { 
+      console.log("Console log Demo"); 
+    }); 
+
+    errorBtns[1].addEventListener('click', () => { 
+      console.error("this is an error"); 
+    }); 
+
+    errorBtns[2].addEventListener('click', ()=> { 
+      console.dir(document.head); 
+    });
+
+    errorBtns[3].addEventListener('click', ()=> { 
+      console.dirxml(document.querySelector('fieldset')); 
+    });
+
+    errorBtns[4].addEventListener('click', ()=> { 
+      console.group("grouping"); 
+    });
+
+    errorBtns[5].addEventListener('click', ()=> { 
+      console.groupEnd("grouping"); 
+    });
+
+    errorBtns[6].addEventListener('click', ()=> { 
+      console.table([
+        { 
+          class: 'CSE 110', 
+          professor: "Powell"
+        },
+        {
+          class: "CSE 100", 
+          professor: "Moshiri"
+        }, 
+        {
+          class: "CSE 101", 
+          professor: "Dasgupta"
+        }
+      ]); 
+    });
+
+    errorBtns[7].addEventListener('click', ()=> { 
+      console.log("Timer started"); 
+      console.time("Run Time"); 
+    });
+    errorBtns[8].addEventListener('click', ()=> { 
+      console.log("Timer ended"); 
+      console.timeEnd("Run Time"); 
+    });
+
+    errorBtns[9].addEventListener('click', ()=> { 
+      const first = () => { second(); }; 
+      const second = () => { third(); }; 
+      const third = () => {fourth(); }; 
+      const fourth = () => {console.trace(); };
+      first(); 
+    });
+
+    errorBtns[10].addEventListener('click', ()=> { 
+      try{
+        throw new ReferenceError('This is a reference error'); 
+      }
+      catch(err){ 
+        console.error(err); 
+      }
+    });
+
+    //Try catch finally 
+    try { 
+      let button = document.querySelector("#error-btns button"); 
+      //"forgot" to set descriptiveText with a string 
+      button.innerHTML = descriptiveText; 
+    }
+
+    catch(err) { 
+      let descriptiveText = "some text"
+      document.querySelector("#error-btns button").innerHTML = descriptiveText; 
+    }
+
+    finally { 
+      //Change text back to normal 
+      document.querySelector("#error-btns button").innerHTML = "Console Log Demo"
+    }
+
+    //Custom error 
+    class EntryError extends Error{ 
+      constructor(message){ 
+        super(message); 
+        this.name = "EntryError"; 
+      }
+    }
+
+    //Throw example 
+    try { 
+      throw new EntryError("Your entry is not a number"); 
+    }
+    catch(err){
+      //Caught the error, hooray
+    }
+
+    //Global error handler 
+    window.onerror = function (msg) {
+      console.log("There was an error pal"); 
+      console.error("Conversion Error: Value converted to NaN")
+      return true; 
+    }
   </script>
 </body>
 </html>
